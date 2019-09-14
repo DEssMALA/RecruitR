@@ -1,2 +1,19 @@
-<h1>Positions#index</h1>
-<p>Find me in app/views/positions/index.html.erb</p>
+<div class="container">
+    <h1>Position list</h1>
+    <%= link_to 'New Position', new_position_path %> 
+    <table>
+    <tr>
+        <th>Title</th>
+        <th>Active</th>
+        <th></th>
+    </tr>
+    
+    <% @positions.each do |position| %>
+        <tr>
+        <td><%= position.title %></td>
+        <td><%= position.active %></td>
+        <td><%= link_to 'Show', position_path(position) %></td>
+        </tr>
+    <% end %>
+    </table>
+</div>

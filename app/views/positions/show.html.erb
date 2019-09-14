@@ -1,0 +1,27 @@
+<p>
+    <strong>Title:</strong>
+    <%= @position.title %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @position.active %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @position.description %>
+</p>
+
+<p>
+  <strong>Skills:</strong>
+  <%= @skills.join(", ") %>
+</p>
+
+<p>
+  <strong>Traits:</strong>
+  <%= @traits.join(", ") %>
+</p>
+
+<%= link_to 'Edit', edit_position_path(@position) %> |
+<%= link_to 'Back', positions_path %>

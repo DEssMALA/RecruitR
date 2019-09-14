@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  score: 1
+  trait: one
+  applicant: one
+
+two:
+  score: 1
+  trait: two
+  applicant: two
