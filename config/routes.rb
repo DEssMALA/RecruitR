@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   get '/applicants', to: 'applicants#index'
   delete '/applicants/:id', to: 'applicants#destroy'
   get 'positions/:id/applicants', to: 'applicants#positions'
+  get '/applicants/:id/recruiters', to: 'applicants#recruiters' 
+
+    # Positions related routes
+    resources :recruiters
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

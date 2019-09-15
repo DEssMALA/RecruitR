@@ -1,0 +1,27 @@
+<p>
+    <strong>Name:</strong>
+    <%= @recruiter.name %>
+</p>
+
+<p>
+  <strong>Surname:</strong>
+  <%= @recruiter.surname %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @recruiter.email %>
+</p>
+
+<p>
+    <strong>Skills:</strong>
+</p>
+<ul>
+<% for s in @recruiter.skills do %>
+    <li><%= s.name %></li>
+<% end %>
+</ul>
+
+
+<%= link_to 'Edit', edit_recruiter_path(@recruiter) %> |
+<%= link_to 'Back', recruiters_path %>

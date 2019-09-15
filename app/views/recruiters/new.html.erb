@@ -1,0 +1,45 @@
+<h1>New Recruiter</h1>
+
+<%= form_with scope: :recruiter, url: recruiters_path, local: true do |form| %>
+  
+  <% if @recruiter.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@recruiter.errors.count, "error") %> prohibited
+        this recruiter from being saved:
+      </h2>
+      <ul>
+        <% @recruiter.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <b><%= form.label :name %></b>
+    <%= form.text_field :name %>
+  </p>
+  
+  <p>
+    <b><%= form.label :surname %></b>
+    <%= form.text_field :surname %>
+  </p>
+
+  <p>
+    <b><%= form.label :email %></b>
+    <%= form.text_field :email %>
+  </p>
+
+  <p>
+    <b><%= label_tag(:skills, "Skills") %></b>
+    <%= text_field_tag(:skills) %>
+  </p>
+  
+  <p>
+    <%= form.submit %>
+  </p>
+
+<% end %>
+
+<%= link_to 'Back', recruiters_path %>

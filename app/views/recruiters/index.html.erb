@@ -1,0 +1,21 @@
+<div class="container">
+    <h1>Recruiter list</h1>
+    <%= link_to 'New Recruiter', new_recruiter_path %> 
+    <table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+    
+    <% @recruiters.each do |recruiter| %>
+        <tr>
+        <td><%= recruiter.name %></td>
+        <td><%= recruiter.surname %></td>
+        <td><%= recruiter.email %></td>
+        <td><%= link_to 'Show', recruiter_path(recruiter) %></td>
+        </tr>
+    <% end %>
+    </table>
+</div>
