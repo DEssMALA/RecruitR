@@ -1,0 +1,29 @@
+<div class="container">
+    <h1>
+    Appicants for
+    <%= @position.title %>
+    </h1>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Skills</th>
+            <th></th>
+        </tr>
+        
+        <% @applicants.each do |applicant| %>
+            <tr>
+            <td><%= applicant.name %></td>
+            <td><%= applicant.surname %></td>
+            <td><%= applicant.email %></td>
+            <td><%= @skills[applicant.id].join(", ") %></td>
+            <td><%= link_to 'Show', "/applicants/#{applicant.id}" %></td>
+            </tr>
+        <% end %>
+    </table>
+
+<%= link_to 'Back', positions_path %> | 
+<%= link_to 'New', "/applicants/new/#{@position.id}" %>
+</div>

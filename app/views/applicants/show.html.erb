@@ -1,0 +1,52 @@
+<p>
+    <strong>Position:</strong>
+    <%= @applicant.position.title %>
+</p>
+
+<p>
+    <strong>Name:</strong>
+    <%= @applicant.name %>
+</p>
+
+<p>
+  <strong>Surname:</strong>
+  <%= @applicant.surname %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @applicant.email %>
+</p>
+
+<p>
+    <strong>Recruiter:</strong>
+    <% if @applicant.recruiter %>
+        <%= @applicant.recruiter.name %>
+    <% else %>
+        Not selected
+    <% end %>
+</p>
+
+<p>
+    <strong>Skills:</strong>
+</p>
+<ul>
+<% for s in @applicant.skills do %>
+    <li><%= s.name %></li>
+<% end %>
+</ul>
+
+<p>
+    <strong>Traits:</strong>
+</p>
+<ul>
+<% n = 0 %>
+<% for t in @applicant.traits do %>
+    <li>Score: <%= @applicant.trait_scores[n].score %>, Trait: <%= @applicant.traits[n].name %></li>
+    <% n += 1 %>
+<% end %>
+</ul>
+
+
+<%= link_to 'Edit', "/applicants/#{@applicant.id}/edit" %> |
+<%= link_to 'Back', applicants_path %>

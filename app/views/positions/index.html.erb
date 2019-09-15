@@ -5,6 +5,7 @@
     <tr>
         <th>Title</th>
         <th>Active</th>
+        <th>Aplicants</th>
         <th></th>
     </tr>
     
@@ -12,6 +13,7 @@
         <tr>
         <td><%= position.title %></td>
         <td><%= position.active %></td>
+        <td><%= link_to position.applicants.length, "positions/#{position.id}/applicants" %></td>
         <td><%= link_to 'Show', position_path(position) %></td>
         </tr>
     <% end %>

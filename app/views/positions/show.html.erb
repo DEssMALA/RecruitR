@@ -24,4 +24,5 @@
 </p>
 
 <%= link_to 'Edit', edit_position_path(@position) %> |
-<%= link_to 'Back', positions_path %>
+<%= link_to 'Back', positions_path %> | 
+<%= link_to 'Create New Applicant', "/applicants/new/#{@position.id}" %>

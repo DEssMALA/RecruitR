@@ -1,0 +1,69 @@
+<p>
+  <strong>Position:</strong>
+  <%= @position.title %>
+</p>
+<%= form_with(url: "/applicants/create/#{@position.id}") do %>
+
+    <% if @applicant && @applicant.errors.any? %>
+        <div id="error_explanation">
+        <h2>
+            <%= pluralize(@applicant.errors.count, "error") %> prohibited
+            this applicant from being saved:
+        </h2>
+        <ul>
+            <% @applicant.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+            <% end %>
+        </ul>
+        </div>
+    <% end %>
+
+    <p>
+        <b><%= label_tag(:name, "Name:") %></b>
+        <%= text_field_tag(:name) %>
+    </p>
+
+    <p>
+        <b><%= label_tag(:surname, "Surname:") %></b>
+        <%= text_field_tag(:surname) %>
+    </p>
+
+    <p>
+        <b><%= label_tag(:email, "Email:") %></b>
+        <%= email_field(:user, :address) %>
+    </p>
+    
+    <%= fields_for :skills do |skill_form| %>
+        <p><b>Skills:</b></p>
+        <ul>
+        <% for s in @position.skills do %>
+            <li>
+            <%= skill_form.check_box s.name %>
+            <%= s.name %>
+            </li>
+        <% end %>
+        </ul>
+    <% end %>
+
+    <%= fields_for :traits do |trait_form|%>
+        <p><b>Traits:</b></p>
+        <p>(higher is better)</p>
+        <ul>
+        <% for t in @position.traits do %>
+            <li>
+            <select name="traits[<%= t.name %>]" id="trait_<%= t.name %>">
+                <% for n in 1..5 do %>
+                    <option value="<%= n %>"><%= n %></option>
+                <% end %>
+            </select>
+            <%= t.name %>
+            </li>
+        <% end %>
+        </ul>
+    <% end %>
+
+
+    <%= submit_tag("Create") %>
+    
+
+  <% end %>

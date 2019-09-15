@@ -1,0 +1,20 @@
+<div class="container">
+    <h1>All Applicants</h1>
+    <table>
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Position</th>
+        <th></th>
+    </tr>
+    
+    <% @applicants.each do |applicant| %>
+        <tr>
+        <td><%= applicant.name %></td>
+        <td><%= applicant.surname %></td>
+        <td><%= applicant.position.title %></td>
+        <td><%= link_to 'Show', "applicants/#{applicant.id}" %></td>
+        </tr>
+    <% end %>
+    </table>
+</div>
