@@ -20,8 +20,7 @@ class PositionsController < ApplicationController
   end
 
   def create
-    puts "\n\n\nNew form"
-    puts params
+
     # Newly created positions are active by default.
     params[:position]["active"] = true
 
@@ -54,9 +53,6 @@ class PositionsController < ApplicationController
     
     new_skills = listify_from_string(params[:skills])
     new_traits = listify_from_string(params[:traits])
-
-
-
 
     if @position.update(position_params)
       if current_skills != new_skills

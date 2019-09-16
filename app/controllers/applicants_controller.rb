@@ -8,27 +8,25 @@ class ApplicantsController < ApplicationController
         @applicant = Applicant.find_by(id: params[:id])
     end
 
+    # Applicant is by default assigned to specific position
     def new
         position_id = params[:id]
-        puts "\n\nRequested to fill new applicants form for position: #{position_id}\n"
         @position = Position.find(params[:id])
     end
-        
+    
     def edit
         @applicant = Applicant.find_by(id: params[:id])
         @position = Position.find_by(id: @applicant.position.id)
     end
 
     def create
-        puts "\n\nPOST to create new applicant \n"
-        print params
-
         @position = Position.find_by(id: params[:id])
 
         # Retrieve status of skills and traits from form
         skills = params[:skills]
         traits = params[:traits]
 
+        # If skills was not submitted make the hash anyway
         if !skills
             skills = {}
         end
@@ -36,28 +34,21 @@ class ApplicantsController < ApplicationController
             traits = {}
         end
 
-
-        
-
         # Check if there is such position (for security)
         if @position
-            request_params = params
-            params = ActionController::Parameters.new({
+            # Hold parameters to submit to DB
+            applicant_parameters = ActionController::Parameters.new({
                 applicant: {
-                    name: request_params[:name],
-                    surname: request_params[:surname],
-                    email: request_params[:user][:address],
+                    name: params[:name],
+                    surname: params[:surname],
+                    email: params[:user][:address],
                     position_id: @position.id
                 }
             })
 
-            @applicant = Applicant.new(applicant_params(params))
-
+            @applicant = Applicant.new(applicant_params(applicant_parameters))
             if @applicant.save            
-                puts "\n\n Applicant"
-                print @applicant
-                print @applicant[:id]
-                
+               
                 # Add skills to applicant
                 for s in skills.keys do
                     if skills[s] == "1"
@@ -80,14 +71,10 @@ class ApplicantsController < ApplicationController
     end
 
     def update
-        puts "\n\nUpdating Applicant"
-        print params
+
         @applicant = Applicant.find_by(id: params[:id])
         new_skills = params[:skills]
         new_traits = params[:traits]
-        puts "\n\nNew skilss and traits:"
-        print new_skills
-        print new_traits
 
         # Delete current applicant skills
         @applicant.skills.clear
@@ -114,18 +101,19 @@ class ApplicantsController < ApplicationController
     end
 
     def destroy
-        puts "\n\n Call for Destroy"
-        print params 
         @applicant = Applicant.find(params[:id])
         @applicant.destroy
     
         redirect_to "/applicants"
     end
 
+    # Show all applications for specific position
     def positions
         position_id = params[:id]
         @position = Position.find_by(id: position_id)
         @applicants = @position.applicants
+        
+        # Arrange applicant skills for easier use in view
         @skills = {}
         for applicant in @applicants do
             @skills[applicant[:id]] = []
@@ -133,34 +121,33 @@ class ApplicantsController < ApplicationController
                 @skills[applicant[:id]].push(skill.name)
             end
         end
-        puts "\n\n   Position applicants"
-        print position_id
     end
 
+    # Logic for suggesting recruiters for applicants
     def recruiters
         applicant_id = params[:id]
         applicant = Applicant.find_by(id: applicant_id)
         recruiters = Recruiter.all
+
+        # First, see if can establish match with skills
         applicants_skills = get_skills_list(applicant)
-        print applicants_skills
         if applicants_skills.length > 1
-            print "\nlets do applicants_skills\n"
-            puts 1
+
+            # Make nice hash with recruiter skills
             recruiters_skills = {}
-            puts 2
             for recruiter in recruiters do
-                puts 3
                 recruiters_skills[recruiter.id] = get_skills_list(recruiter)
-                puts 4
             end
 
+            # Determine applicant and recruiter skill intersection
             for recruiter in recruiters_skills.keys do
                 recruiters_skills[recruiter] = recruiters_skills[recruiter] & applicants_skills
             end
             recruiters_skills = recruiters_skills.sort_by { |k, v| v.length }.reverse
+            
+            # No overlapping skills means no match
             if recruiters_skills[0][0] > 0
-                puts "Recruiter chosen"
-                print recruiters_skills[0]
+
                 best_id = recruiters_skills[0][0]
                 best = Recruiter.find_by(id: best_id)
                 @choice = {
@@ -170,36 +157,36 @@ class ApplicantsController < ApplicationController
                     applicant_id: applicant_id
                 }
             end
-
         end
 
+        # If skills did not match, see who has most experience
+        # by comparing number of applicants linked to recruiter
         if @choice == nil
-            puts "\n\n\ndid not choose"
-            recruiters_experiance = {}
-            puts 2
+
+            # Get the hash with applicant count for each recruiter
+            recruiters_experience = {}
             for recruiter in recruiters do
-                recruiters_experiance[recruiter.id] = recruiter.applicants.length
+                recruiters_experience[recruiter.id] = recruiter.applicants.length
             end
-            recruiters_experiance = recruiters_experiance.sort_by { |k, v| v }.reverse
-            puts "\n\n\nrec ex"
-            print recruiters_experiance
+            recruiters_experience = recruiters_experience.sort_by { |k, v| v }.reverse
             
-            if recruiters_experiance[0][1] > 0
-                puts "Recruiter chosen"
-                print recruiters_experiance[0]
-                best_id = recruiters_experiance[0][0]
+            # Chose highest if it has at least one applicant linked to it
+            if recruiters_experience[0][1] > 0
+
+                best_id = recruiters_experience[0][0]
                 best = Recruiter.find_by(id: best_id)
                 @choice = {
                     id: best_id,
-                    on: "experiance",
+                    on: "experience",
                     name: best.name + " " + best.surname,
                     applicant_id: applicant_id
                 }
             end
         end
 
+        # If boot previous logic did not return match,
+        # choose recruiter randomly
         if @choice == nil
-            puts "\n\n\ndid not choose"
             offset = rand(Recruiter.count)
             recruiter = Recruiter.offset(offset).first
             @choice = {
@@ -210,12 +197,13 @@ class ApplicantsController < ApplicationController
                 }
         end
 
+        # Get all recruiter for option to chose
         @options = []
         for r in recruiters do
             @options.push([r.name + " " + r.surname, r.id])
         end
 
-        puts "\n\nAsked to change recruiters"
+        # For Modal
         respond_to do |format|
             format.html
             format.js
@@ -223,8 +211,8 @@ class ApplicantsController < ApplicationController
 
     end
 
+    # Save recruiter for applicant
     def update_recruiter
-        print params
         @applicant = Applicant.find_by(id: params[:id])
         recruiter = Recruiter.find_by(id: params[:chosen_recruiter])
 
@@ -238,17 +226,23 @@ class ApplicantsController < ApplicationController
 
     end
 
+    # When interview date and time is chosen send
+    # send email invitations and save the date-time
     def applicant_invite
-        require 'date'
-        puts "\n\n\n Lets invite applicant"
-        print params
+        require 'date'  # For DateTime.new
+        
+        # Create Date time value
         date = params[:applicant].values
         meeting_time = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i, date[3].to_i, date[4].to_i, 0)
+        
         @applicant = Applicant.find_by(id: params[:id])
         recruiter = @applicant.recruiter
+        
+        # Send emails
         UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).applicant_meeting_email.deliver_now
         UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).recruiter_meeting_email.deliver_now
         
+        # Save meeting time and return
         params = ActionController::Parameters.new({
                 applicant: {
                     meeting: meeting_time

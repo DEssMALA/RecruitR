@@ -1,5 +1,6 @@
 class UserMailer < ApplicationMailer
 
+    # Email to notify applicant about interview time
     def applicant_meeting_email
         @applicant = params[:applicant]
         @recruiter = params[:recruiter]
@@ -8,6 +9,7 @@ class UserMailer < ApplicationMailer
         mail(to: @applicant.email, subject: "Interview for #{@applicant.position.title} scheduled")
     end
 
+    # Email to notify recruiter about interview time
     def recruiter_meeting_email
         @applicant = params[:applicant]
         @recruiter = params[:recruiter]

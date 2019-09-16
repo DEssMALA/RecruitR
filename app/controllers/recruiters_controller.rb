@@ -18,8 +18,6 @@ class RecruitersController < ApplicationController
     end
 
     def create
-        puts "\n\nCreate new Recruiter"
-        print params
 
         # Saving new position
         @recruiter = Recruiter.new(recruiter_params)
@@ -33,11 +31,11 @@ class RecruitersController < ApplicationController
         else
             render 'new'
         end
-
     end
 
     def update
         @recruiter = Recruiter.find_by(id: params[:id])
+
         current_skills = get_skills_list(@recruiter)
         new_skills = listify_from_string(params[:skills])
 
@@ -52,7 +50,6 @@ class RecruitersController < ApplicationController
         else
             render 'edit'
         end
-
     end
 
     def destroy
