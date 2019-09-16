@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_164318) do
+ActiveRecord::Schema.define(version: 2019_09_15_224135) do
 
   create_table "applicants", force: :cascade do |t|
     t.string "name"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_164318) do
     t.datetime "updated_at", null: false
     t.integer "position_id"
     t.integer "recruiter_id"
+    t.datetime "meeting"
     t.index ["position_id"], name: "index_applicants_on_position_id"
     t.index ["recruiter_id"], name: "index_applicants_on_recruiter_id"
   end

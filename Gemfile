@@ -64,3 +64,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Add bootstrap to rails
 gem 'bootstrap', '> 4', '< 5'
 gem 'jquery-rails'
+
+# For date time select
+gem 'simple_form'

@@ -85,4 +85,4 @@
   <%= link_to 'Back', controller: "applicants", action: "show", id: @applicant.id %>
   <%= link_to 'Destroy', "#{applicants_path}/#{@applicant.id}",
                 method: :delete,
-                data: { confirm: 'Are you sure?' } %>
+                data: { confirm: 'Are you sure you want to destroy applicant by never answering to his/her resume?' } %>

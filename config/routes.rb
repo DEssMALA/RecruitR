@@ -8,13 +8,15 @@ Rails.application.routes.draw do
   # Applicant related routes
   get '/applicants/new/:id', to: 'applicants#new'
   post '/applicants/create/:id', to: 'applicants#create'
-  get '/applicants/:id', to: 'applicants#show'
+  get '/applicants/:id', to: 'applicants#show', as: 'applicant'
   get '/applicants/:id/edit', to: 'applicants#edit'
   patch '/applicants/:id', to: 'applicants#update'
   get '/applicants', to: 'applicants#index'
   delete '/applicants/:id', to: 'applicants#destroy'
-  get 'positions/:id/applicants', to: 'applicants#positions'
-  get '/applicants/:id/recruiters', to: 'applicants#recruiters' 
+  get '/positions/:id/applicants', to: 'applicants#positions'
+  get '/applicants/:id/recruiters', to: 'applicants#recruiters'
+  post '/applicants/update_recruiter/:id', to: 'applicants#update_recruiter'
+  post '/applicant_invite/:id', to: 'applicants#applicant_invite'
 
     # Positions related routes
     resources :recruiters

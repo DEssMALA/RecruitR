@@ -28,9 +28,13 @@ class ApplicantsController < ApplicationController
         # Retrieve status of skills and traits from form
         skills = params[:skills]
         traits = params[:traits]
-        puts "\n\nSkils and Traits"
-        print skills
-        print traits
+
+        if !skills
+            skills = {}
+        end
+        if !traits
+            traits = {}
+        end
 
 
         
@@ -133,9 +137,131 @@ class ApplicantsController < ApplicationController
         print position_id
     end
 
+    def recruiters
+        applicant_id = params[:id]
+        applicant = Applicant.find_by(id: applicant_id)
+        recruiters = Recruiter.all
+        applicants_skills = get_skills_list(applicant)
+        print applicants_skills
+        if applicants_skills.length > 1
+            print "\nlets do applicants_skills\n"
+            puts 1
+            recruiters_skills = {}
+            puts 2
+            for recruiter in recruiters do
+                puts 3
+                recruiters_skills[recruiter.id] = get_skills_list(recruiter)
+                puts 4
+            end
+
+            for recruiter in recruiters_skills.keys do
+                recruiters_skills[recruiter] = recruiters_skills[recruiter] & applicants_skills
+            end
+            recruiters_skills = recruiters_skills.sort_by { |k, v| v.length }.reverse
+            if recruiters_skills[0][0] > 0
+                puts "Recruiter chosen"
+                print recruiters_skills[0]
+                best_id = recruiters_skills[0][0]
+                best = Recruiter.find_by(id: best_id)
+                @choice = {
+                    id: best_id,
+                    on: "skills",
+                    name: best.name + " " + best.surname,
+                    applicant_id: applicant_id
+                }
+            end
+
+        end
+
+        if @choice == nil
+            puts "\n\n\ndid not choose"
+            recruiters_experiance = {}
+            puts 2
+            for recruiter in recruiters do
+                recruiters_experiance[recruiter.id] = recruiter.applicants.length
+            end
+            recruiters_experiance = recruiters_experiance.sort_by { |k, v| v }.reverse
+            puts "\n\n\nrec ex"
+            print recruiters_experiance
+            
+            if recruiters_experiance[0][1] > 0
+                puts "Recruiter chosen"
+                print recruiters_experiance[0]
+                best_id = recruiters_experiance[0][0]
+                best = Recruiter.find_by(id: best_id)
+                @choice = {
+                    id: best_id,
+                    on: "experiance",
+                    name: best.name + " " + best.surname,
+                    applicant_id: applicant_id
+                }
+            end
+        end
+
+        if @choice == nil
+            puts "\n\n\ndid not choose"
+            offset = rand(Recruiter.count)
+            recruiter = Recruiter.offset(offset).first
+            @choice = {
+                    id: recruiter.id,
+                    on: "luck",
+                    name: recruiter.name + " " + recruiter.surname,
+                    applicant_id: applicant_id
+                }
+        end
+
+        @options = []
+        for r in recruiters do
+            @options.push([r.name + " " + r.surname, r.id])
+        end
+
+        puts "\n\nAsked to change recruiters"
+        respond_to do |format|
+            format.html
+            format.js
+        end
+
+    end
+
+    def update_recruiter
+        print params
+        @applicant = Applicant.find_by(id: params[:id])
+        recruiter = Recruiter.find_by(id: params[:chosen_recruiter])
+
+        params = ActionController::Parameters.new({
+                applicant: {
+                    recruiter_id: recruiter.id
+                }
+            })
+        @applicant.update(applicant_params(params))
+        redirect_to "/applicants/#{@applicant[:id]}"
+
+    end
+
+    def applicant_invite
+        require 'date'
+        puts "\n\n\n Lets invite applicant"
+        print params
+        date = params[:applicant].values
+        meeting_time = DateTime.new(date[0].to_i, date[1].to_i, date[2].to_i, date[3].to_i, date[4].to_i, 0)
+        @applicant = Applicant.find_by(id: params[:id])
+        recruiter = @applicant.recruiter
+        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).applicant_meeting_email.deliver_now
+        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).recruiter_meeting_email.deliver_now
+        
+        params = ActionController::Parameters.new({
+                applicant: {
+                    meeting: meeting_time
+                }
+            })
+        @applicant.update(applicant_params(params))
+        redirect_to "/applicants/#{@applicant[:id]}"
+    end
+
+
     private
         # Check that parameters contains only allowed values.
         def applicant_params (params)
-            params.require(:applicant).permit(:name, :surname, :email, :position_id)
+            params.require(:applicant).permit(:name, :surname, :email, :position_id, :recruiter_id, :meeting)
         end
 end

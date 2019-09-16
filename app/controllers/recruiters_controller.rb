@@ -55,6 +55,13 @@ class RecruitersController < ApplicationController
 
     end
 
+    def destroy
+        @recruiter = Recruiter.find(params[:id])
+        @recruiter.destroy
+    
+        redirect_to recruiters_path
+      end
+
     private
         # Check that parameters contains only allowed values.
         def recruiter_params

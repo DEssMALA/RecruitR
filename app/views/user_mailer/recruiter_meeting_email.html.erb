@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h4>Hello, <%= @recruiter.name %></h4>
+    <p>
+      We are glad to inform that interview meeting is scheduled.
+    </p>
+    <p>
+      <b>Time: </b><%= @meeting_time.strftime("%m/%d/%Y %I:%M %p") %>
+    </p>
+    <p>
+      <b>Applicant: </b><%= @applicant.name%> <%= @applicant.surname%>
+    </p>
+    <p>Have a great day!</p>
+  </body>
+</html>
