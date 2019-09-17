@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.3'
+ruby '2.6.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
@@ -67,3 +67,6 @@ gem 'jquery-rails'
 
 # For date time select
 gem 'simple_form'
+
+# AWS error: Autoprefixer doesn’t support Node v4.6.0. Update it.
+gem 'mini_racer'
