@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  root 'positions#index'
+  devise_for :users
+  root to: 'positions#index'
   
   # Positions related routes
   resources :positions

@@ -70,3 +70,6 @@ gem 'simple_form'
 
 # AWS error: Autoprefixer doesn’t support Node v4.6.0. Update it.
 gem 'mini_racer'
+
+# Authentication
+gem 'devise'

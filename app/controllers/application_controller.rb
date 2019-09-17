@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
 
+    protect_from_forgery with: :exception
+    before_action :authenticate_user!, except: [:show, :index, :positions]
+
     protected
         def listify_from_string (text)
             if text && text.length
