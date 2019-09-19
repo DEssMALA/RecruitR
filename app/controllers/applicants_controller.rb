@@ -238,18 +238,23 @@ class ApplicantsController < ApplicationController
         @applicant = Applicant.find_by(id: params[:id])
         recruiter = @applicant.recruiter
         
-        # Send emails
-        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).applicant_meeting_email.deliver_now
-        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).recruiter_meeting_email.deliver_now
-        
-        # Save meeting time and return
+        # Save meeting time
         params = ActionController::Parameters.new({
                 applicant: {
                     meeting: meeting_time
                 }
             })
         @applicant.update(applicant_params(params))
-        redirect_to "/applicants/#{@applicant[:id]}"
+        
+        
+        # Send emails
+        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).applicant_meeting_email.deliver_now
+        UserMailer.with(applicant: @applicant, recruiter: recruiter, meeting_time: meeting_time).recruiter_meeting_email.deliver_now
+        
+        # Make calendar invitations.
+        redirect_to new_interview_url(@applicant.id)
+
+        #redirect_to "/applicants/#{@applicant[:id]}"
     end
 
 

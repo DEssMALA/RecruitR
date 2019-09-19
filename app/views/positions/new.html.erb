@@ -1,3 +1,4 @@
+<div class="container">
 <h1>New Position</h1>
 
 <%= form_with scope: :position, url: positions_path, local: true do |form| %>
@@ -37,9 +38,10 @@
   </p>
   
   <p>
-    <%= form.submit %>
+    <%= form.submit(class: 'btn btn-success') %>
   </p>
 
 <% end %>
-
-<%= link_to 'Back', positions_path %>
+<hr>
+<%= link_to 'Back', positions_path, class: 'btn btn-primary'%>
+</div>

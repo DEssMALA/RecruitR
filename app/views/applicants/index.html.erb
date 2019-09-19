@@ -1,19 +1,17 @@
 <div class="container">
     <h1>All Applicants</h1>
-    <table>
+    <table class="table table-hover">
+    <thead class="thead-dark">
     <tr>
-        <th>Name</th>
-        <th>Surname</th>
+        <th>Full name</th>
         <th>Position</th>
-        <th></th>
     </tr>
+    </thead>
     
     <% @applicants.each do |applicant| %>
         <tr>
-        <td><%= applicant.name %></td>
-        <td><%= applicant.surname %></td>
-        <td><%= applicant.position.title %></td>
-        <td><%= link_to 'Show', "/applicants/#{applicant.id}" %></td>
+        <td><%= link_to applicant.fullname, applicant_path(applicant) %></td>
+        <td><%= link_to applicant.position.title, position_path(applicant.position) %></td>
         </tr>
     <% end %>
     </table>

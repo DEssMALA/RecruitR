@@ -1,7 +1,8 @@
-<p>
-  <strong>Position:</strong>
-  <%= @position.title %>
-</p>
+<div class="container">
+
+<h1>
+  New applicant for <%= @position.title %>
+</h1>
 <%= form_with(url: "/applicants/create/#{@position.id}") do %>
 
     <% if @applicant && @applicant.errors.any? %>
@@ -63,7 +64,8 @@
     <% end %>
 
 
-    <%= submit_tag("Create") %>
+    <%= submit_tag("Create", class: 'btn btn-success') %>
     
 
   <% end %>
+</div>

@@ -19,8 +19,16 @@ Rails.application.routes.draw do
   post '/applicants/update_recruiter/:id', to: 'applicants#update_recruiter'
   post '/applicant_invite/:id', to: 'applicants#applicant_invite'
 
-    # Positions related routes
-    resources :recruiters
+  # Positions related routes
+  resources :recruiters
+
+  # Google calendar routes
+  get '/redirect', to: 'calendar_api#redirect', as: 'redirect'
+  get '/callback', to: 'calendar_api#callback', as: 'callback'
+  get '/calendars', to: 'calendar_api#calendars', as: 'calendars'
+  get '/events/:calendar_id', to: 'calendar_api#events', as: 'events', calendar_id: /[^\/]+/
+  post '/events/:calendar_id', to: 'calendar_api#new_event', as: 'new_event', calendar_id: /[^\/]+/
+  get '/new_interview/:id', to: 'calendar_api#new_interview', as: 'new_interview'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,7 +1,8 @@
-<p>
-    <strong>Title:</strong>
+<div class="container">
+
+<h1>
     <%= @position.title %>
-</p>
+</h1>
 
 <p>
   <strong>Active:</strong>
@@ -23,6 +24,7 @@
   <%= @traits.join(", ") %>
 </p>
 
-<%= link_to 'Edit', edit_position_path(@position) %> |
-<%= link_to 'Positions', positions_path %> | 
-<%= link_to 'Create New Applicant', "/applicants/new/#{@position.id}" %>
+<%= link_to 'Edit', edit_position_path(@position), class: 'btn btn-warning' %>
+<%= link_to 'Positions', positions_path, class: 'btn btn-primary' %>
+<%= link_to 'Create New Applicant', "/applicants/new/#{@position.id}", class: 'btn btn-success' %>
+</div>

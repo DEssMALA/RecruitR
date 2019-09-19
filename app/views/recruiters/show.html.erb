@@ -1,3 +1,5 @@
+<div class="container">
+<h1>Recruiter</h1>
 <p>
     <strong>Name:</strong>
     <%= @recruiter.name %>
@@ -23,5 +25,6 @@
 </ul>
 
 
-<%= link_to 'Edit', edit_recruiter_path(@recruiter) %> |
-<%= link_to 'Recruiters', recruiters_path %>
+<%= link_to 'Edit', edit_recruiter_path(@recruiter), {class: 'btn btn-warning'} %>
+<%= link_to 'Recruiters', recruiters_path, {class: 'btn btn-primary'} %>
+</div>

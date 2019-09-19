@@ -1,20 +1,22 @@
 <div class="container">
     <h1>Position list</h1>
-    <%= link_to 'New Position', new_position_path %> 
-    <table>
+    <%= link_to 'New Position', new_position_path, class: 'btn btn-success' %> 
+    <table class="table table-hover" style="margin-top: 20px">
+    <thead class="thead-dark">
     <tr>
         <th>Title</th>
-        <th>Active</th>
         <th>Aplicants</th>
-        <th></th>
     </tr>
+    </thead>
     
     <% @positions.each do |position| %>
+        <% if position.active %>
         <tr>
-        <td><%= position.title %></td>
-        <td><%= position.active %></td>
+        <% else %>
+        <tr class="table-warning">
+        <%end %>
+        <td><%= link_to position.title, position_path(position) %></td>
         <td><%= link_to position.applicants.length, "positions/#{position.id}/applicants" %></td>
-        <td><%= link_to 'Show', position_path(position) %></td>
         </tr>
     <% end %>
     </table>

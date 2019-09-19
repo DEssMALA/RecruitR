@@ -73,3 +73,6 @@ gem 'mini_racer'
 
 # Authentication
 gem 'devise'
+
+# Google API client for calendar integration
+gem 'google-api-client', require: 'google/apis/calendar_v3'

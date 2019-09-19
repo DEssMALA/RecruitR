@@ -1,3 +1,4 @@
+<div class="container">
 <h1>Edit Recruiter</h1>
 
 <%= form_with(model: @recruiter, local: true) do |form| %>
@@ -37,12 +38,14 @@
   </p>
   
   <p>
-    <%= form.submit %>
+    <%= form.submit(class: 'btn btn-success') %>
   </p>
 
 <% end %>
-
-<%= link_to 'Back', recruiters_path %>
+<hr>
+<%= link_to 'Back', recruiters_path, class: 'btn btn-primary' %>
 <%= link_to 'Delete', recruiter_path(@recruiter),
               method: :delete,
-              data: { confirm: 'Are you sure?' } %>
+              data: { confirm: 'Are you sure?' },
+              class: 'btn btn-danger' %>
+</div>

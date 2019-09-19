@@ -4,4 +4,9 @@ class Applicant < ApplicationRecord
     belongs_to :recruiter, optional: true
     has_many :trait_scores
     has_many :traits, through: :trait_scores
+
+    def fullname
+        return self.name + " " + self.surname
+    end
+
 end
